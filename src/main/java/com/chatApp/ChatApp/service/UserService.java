@@ -4,6 +4,7 @@ import com.chatApp.ChatApp.common.Dto.UserRegistrationRequest;
 import com.chatApp.ChatApp.common.Dto.UserResponse;
 import com.chatApp.ChatApp.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.chatApp.ChatApp.models.User;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     public UserResponse registerUser(UserRegistrationRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email already exists");
@@ -23,7 +26,6 @@ public class UserService {
             throw new IllegalArgumentException("Phone number already exists");
         }
 
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(request.password());
 
 
