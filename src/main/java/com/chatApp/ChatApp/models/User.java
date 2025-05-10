@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data // Generates getters, setters, toString, equals, and hashCode
 @NoArgsConstructor // Generates no-args constructor
 @AllArgsConstructor // Generates all-args constructor
+@Table(name = "Users")  // Change the table name to "app_user" to avoid the reserved word "user"
 public class User {
 
     @Id
