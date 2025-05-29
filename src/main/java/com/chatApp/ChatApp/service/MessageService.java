@@ -3,6 +3,7 @@ package com.chatApp.ChatApp.service;
 
 import com.chatApp.ChatApp.common.Dto.MessageResponse;
 import com.chatApp.ChatApp.common.Dto.SendMessageRequest;
+import com.chatApp.ChatApp.common.mqtt.MqttClientService;
 import com.chatApp.ChatApp.models.Conversation;
 import com.chatApp.ChatApp.models.Message;
 import com.chatApp.ChatApp.repository.ConversationRepository;
@@ -21,7 +22,9 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final ConversationRepository conversationRepository;
 
-    public MessageResponse saveMessage(SendMessageRequest request) {
+    private final MqttClientService mqttClientService;
+
+    public MessageResponse sendMessage(SendMessageRequest request) {
         Conversation conversation = conversationRepository.findById(request.conversationId())
                 .orElseThrow();
 
@@ -36,12 +39,21 @@ public class MessageService {
 
         Message savedMessage = messageRepository.save(message);
 
-        return new MessageResponse(
+        MessageResponse messageToShow= new MessageResponse(
                 savedMessage.getConversation().getId(),
                 savedMessage.getSenderId(),
                 savedMessage.getSenderName(),
                 savedMessage.getContent()
         );
+
+        System.out.println("Message string object: "+ messageToShow.toString());
+
+        mqttClientService.publishMessage("chat/"+messageToShow.conversationId(),messageToShow.toString());
+
+
+
+
+        return messageToShow;
     }
 
 

@@ -3,14 +3,13 @@ package com.chatApp.ChatApp.controller;
 
 import com.chatApp.ChatApp.common.Dto.MessageResponse;
 import com.chatApp.ChatApp.common.Dto.SendMessageRequest;
-import com.chatApp.ChatApp.models.Message;
+import com.chatApp.ChatApp.common.mqtt.MqttClientService;
 import com.chatApp.ChatApp.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/messages")
@@ -19,9 +18,12 @@ public class MessageController {
 
     private final MessageService messageService;
 
+    private final MqttClientService mqttClientService;
+
+
     @PostMapping("/send")
     public ResponseEntity<MessageResponse> sendMessage(@RequestBody SendMessageRequest request) {
-        MessageResponse message = messageService.saveMessage(request);
+        MessageResponse message = messageService.sendMessage(request);
         return ResponseEntity.ok(message);
     }
 
