@@ -18,8 +18,8 @@ public class ConversationService {
         return conversationRepository.findAll();
     }
 
-    public Conversation getConversationById(String id) {
-        return conversationRepository.findById(id).orElse(null);
+    public List<Conversation> getConversationById(String id) {
+        return conversationRepository.findBySenderId(id);
     }
 
     public Conversation createConversation(Conversation conversation) {

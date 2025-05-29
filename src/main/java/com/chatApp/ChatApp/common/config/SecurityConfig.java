@@ -1,6 +1,7 @@
 package com.chatApp.ChatApp.common.config;
 
 import com.chatApp.ChatApp.utils.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,35 +14,35 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/register", "/login", "/upload/voice", "/h2-console/**").permitAll()
-                        .anyRequest().authenticated()
-                )
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**", "/register", "/login", "/upload/voice")
+                        .ignoringRequestMatchers("/h2-console/**","conversations","messages/send", "/register", "/login", "/upload/voice")
                 )
                 .headers(headers -> headers
-                        // Disable X-Frame-Options for H2 console using non-deprecated method
-                        .frameOptions(frameOptions -> frameOptions.disable())
+                        .frameOptions(frameOptions -> frameOptions.disable()) // Enable H2 Console
                 )
                 .sessionManagement(session -> session
-                        // Use stateless session for JWT
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
-
-        // Add JWT filter before UsernamePasswordAuthenticationFilter
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                )
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(
+                                "/register",
+                                "/login",
+                                "messages/**",
+                                "conversations",
+                                "/upload/voice",
+                                "/h2-console/**"
+                        ).permitAll()
+                        .anyRequest().authenticated() // All other requests require authentication
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

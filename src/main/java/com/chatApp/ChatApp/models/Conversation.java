@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class Conversation {
     @Id
     private String id;
+    private String senderId;
     private String userId;
     private String userName;
 }

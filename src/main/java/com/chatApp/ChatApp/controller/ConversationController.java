@@ -20,7 +20,7 @@ public class ConversationController {
     }
 
     @GetMapping("/{id}")
-    public Conversation getConversationById(@PathVariable String id) {
+    public List<Conversation> getConversationById(@PathVariable String id) {
         return conversationService.getConversationById(id);
     }
 
