@@ -3,6 +3,7 @@ package com.chatApp.ChatApp.service;
 
 import com.chatApp.ChatApp.common.Dto.MessageResponse;
 import com.chatApp.ChatApp.common.Dto.SendMessageRequest;
+import com.chatApp.ChatApp.common.kafka.KafkaMessageSender;
 import com.chatApp.ChatApp.common.mqtt.MqttClientService;
 import com.chatApp.ChatApp.models.Conversation;
 import com.chatApp.ChatApp.models.Message;
@@ -23,6 +24,7 @@ public class MessageService {
     private final ConversationRepository conversationRepository;
 
     private final MqttClientService mqttClientService;
+    private final KafkaMessageSender kafkaMessageSender;
 
     public MessageResponse sendMessage(SendMessageRequest request) {
         Conversation conversation = conversationRepository.findById(request.conversationId())
