@@ -25,14 +25,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        // Allow unauthenticated access to public endpoints
-                        .requestMatchers("/register", "/auth", "/h2-console/**").permitAll()
-                        // All other endpoints require authentication
+                        .requestMatchers("/register", "/login", "/upload/voice", "/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf
-                        // Disable CSRF for H2 console and API endpoints
-                        .ignoringRequestMatchers("/h2-console/**", "/register", "/auth")
+                        .ignoringRequestMatchers("/h2-console/**", "/register", "/login", "/upload/voice")
                 )
                 .headers(headers -> headers
                         // Disable X-Frame-Options for H2 console using non-deprecated method
