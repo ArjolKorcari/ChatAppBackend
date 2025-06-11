@@ -18,4 +18,5 @@ public class Conversation {
     private String senderId;
     private String userId;
     private String userName;
+    private String senderName;
 }

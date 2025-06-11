@@ -36,7 +36,7 @@ public class SecurityConfig {
                                 "/register",
                                 "/login",
                                 "messages/**",
-                                "conversations",
+                                "conversations/**",
                                 "/upload/voice",
                                 "/h2-console/**"
                         ).permitAll()

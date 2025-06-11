@@ -1,6 +1,8 @@
 package com.chatApp.ChatApp.common.Dto;
 
 public record MessageResponse(
+
+        String id,
         String conversationId,
         String senderId,
         String senderName,
@@ -10,10 +12,11 @@ public record MessageResponse(
     public String toString() {
         return String.format("""
             {
+                "id": "%s",
                 "conversationId": "%s",
                 "senderId": "%s",
                 "senderName": "%s",
                 "content": "%s"
-            }""", conversationId, senderId, senderName, content);
+            }""",id, conversationId, senderId, senderName, content);
     }
 }
